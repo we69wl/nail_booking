@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chirp;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ChirpController extends Controller
 {
-    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -56,7 +56,7 @@ class ChirpController extends Controller
      */
     public function show(string $id)
     {
-        //
+       //
     }
 
     /**
@@ -98,5 +98,14 @@ class ChirpController extends Controller
         $chirp->delete();
 
         return redirect('/')->with('success', 'Chirp deleted!');
+    }
+
+    public function byUser(User $user)
+    {
+        $chirps = $user->chirps()
+            ->latest()
+            ->paginate(5);
+
+        return view('chirps.by-user', compact('user', 'chirps'));
     }
 }

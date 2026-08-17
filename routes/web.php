@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ChirpController::class, 'index']);
@@ -36,3 +37,14 @@ Route::post('/login', Login::class)
 Route::post('/logout', Logout::class)
     ->middleware('auth')
     ->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/user/profile', [UserController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/user/profile', [UserController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/user/profile', [UserController::class, 'destroy'])
+        ->name('profile.destroy');
+});
+
+Route::get('/users/{user}/chirps', [ChirpController::class, 'byUser'])->name('chirps.by_user');
