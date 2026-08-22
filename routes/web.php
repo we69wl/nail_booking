@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +47,12 @@ Route::middleware('auth')->group(function () {
         ->name('profile.update');
     Route::delete('/user/profile', [UserController::class, 'destroy'])
         ->name('profile.destroy');
+    Route::post('/chirps/{chirp}/like', [LikeController::class, 'toggle'])->name('chirps.like');
+    Route::post('/users/{user}/follow', [FollowController::class, 'toggle'])->name('users.follow');
 });
 
 Route::get('/users/{user}/chirps', [ChirpController::class, 'byUser'])->name('chirps.by_user');
+
+Route::get('/search', [ChirpController::class, 'search'])->name('chirps.search');
+Route::get('/liked', [ChirpController::class, 'liked'])->middleware('auth')->name('chirps.liked');
+Route::get('/feed', [ChirpController::class, 'feed'])->middleware('auth')->name('chirps.feed');

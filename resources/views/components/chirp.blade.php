@@ -7,16 +7,22 @@
                 <a href="{{ route('chirps.by_user', $chirp->user) }}">
                     <div class="avatar">
                         <div class="size-10 rounded-full">
-                            <img src="https://avatars.laravel.cloud/{{ urlencode($chirp->user->email) }}"
-                                 alt="{{ $chirp->user->name }}'s avatar" class="rounded-full" />
+                            <img
+                                src="{{ $chirp->user->avatar_url }}"
+                                alt="{{ $chirp->user->name }}'s avatar"
+                                class="rounded-full"
+                            />
                         </div>
                     </div>
                 </a>
             @else
                 <div class="avatar placeholder">
                     <div class="size-10 rounded-full">
-                        <img src="https://avatars.laravel.cloud/f61123d5-0b27-434c-a4ae-c653c7fc9ed6?vibe=stealth"
-                            alt="Anonymous User" class="rounded-full" />
+                        <img
+                            src="https://avatars.laravel.cloud/f61123d5-0b27-434c-a4ae-c653c7fc9ed6?vibe=stealth"
+                            alt="Anonymous User"
+                            class="rounded-full"
+                        />
                     </div>
                 </div>
             @endif
@@ -51,6 +57,23 @@
                     @endcan
                 </div>
                 <p class="mt-1">{{ $chirp->message }}</p>
+                <div class="mt-2">
+                    @auth
+                        <form method="POST" action="{{ route('chirps.like', $chirp) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-ghost btn-xs gap-1">
+                                @if ($chirp->likedByUsers->contains(auth()->id()))
+                                    <span class="text-error">♥</span>
+                                @else
+                                    <span>♡</span>
+                                @endif
+                                {{ $chirp->likes->count() }}
+                            </button>
+                        </form>
+                    @else
+                        <span class="text-sm text-base-content/60">♡ {{ $chirp->likes->count() }}</span>
+                    @endauth
+                </div>
             </div>
         </div>
     </div>

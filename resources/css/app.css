@@ -102,7 +102,7 @@ html[data-theme="laravelChirper"],
 /* INPUTS / TEXTAREAS */
 :where(.input, .textarea) {
     border-radius: var(--radius-field);
-    border: var(--border) solid var(--border-color-soft);
+    border: var(--border) solid var(--input-color);
     background: #fff;
 }
 

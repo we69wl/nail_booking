@@ -14,10 +14,9 @@ class ChirpController extends Controller
      */
     public function index()
     {
-        $chirps = Chirp::with('user')
+        $chirps = Chirp::with(['user', 'likes', 'likedByUsers'])
             ->latest()
-            ->take(50)
-            ->get();
+            ->paginate(20);
 
         return view('home', ['chirps' => $chirps]);
     }
@@ -103,9 +102,50 @@ class ChirpController extends Controller
     public function byUser(User $user)
     {
         $chirps = $user->chirps()
+            ->with(['user', 'likes', 'likedByUsers'])
             ->latest()
-            ->paginate(5);
+            ->paginate(20);
 
         return view('chirps.by-user', compact('user', 'chirps'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $chirps = Chirp::with(['user', 'likes', 'likedByUsers'])
+            ->when($query, function ($builder, $query) {
+                $builder->where('message', 'LIKE', '%' . $query . '%');
+            })
+            ->latest()
+            ->paginate(20);
+
+        return view('chirps.search', [
+            'chirps' => $chirps,
+            'query' => $query,
+        ]);
+    }
+
+    public function liked(Request $request)
+    {
+        $chirps = $request->user()
+            ->likedChirps()
+            ->with(['user', 'likes', 'likedByUsers'])
+            ->latest()
+            ->paginate(20);
+
+        return view('chirps.liked', ['chirps' => $chirps]);
+    }
+
+    public function feed(Request $request)
+    {
+        $followingIds = $request->user()->following()->pluck('users.id');
+
+        $chirps = Chirp::with(['user', 'likes', 'likedByUsers'])
+            ->whereIn('user_id', $followingIds)
+            ->latest()
+            ->paginate(20);
+
+        return view('chirps.feed', ['chirps' => $chirps]);
     }
 }
