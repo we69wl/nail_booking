@@ -42,18 +42,20 @@
                     </svg>
                 </a>
 			</div>
-            <div class="navbar-center">
-                <form method="GET" action="{{ route('chirps.search') }}" class="flex items-center gap-2">
-                    <input
-                        type="text"
-                        name="query"
-                        value="{{ $query ?? '' }}"
-                        placeholder="Search chirps..."
-                        class="input input-bordered input-sm w-full"
-                    />
-                    <button type="submit" class="btn btn-primary btn-sm">Search</button>
-                </form>
-            </div>
+            @auth
+                <div class="navbar-center">
+                    <form method="GET" action="{{ route('chirps.search') }}" class="flex items-center gap-2">
+                        <input
+                            type="text"
+                            name="query"
+                            value="{{ $query ?? '' }}"
+                            placeholder="Search chirps..."
+                            class="input input-bordered input-sm w-full"
+                        />
+                        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                    </form>
+                </div>
+            @endauth
 			<div class="navbar-end gap-2">
                 @auth
                     <a href="{{ route('chirps.feed') }}" class="btn btn-ghost btn-sm">
