@@ -1,6 +1,6 @@
 @props(['chirps'])
 
-<div class="space-y-4 mt-8">
+<div class="space-y-4">
     @forelse ($chirps as $chirp)
         <x-chirp :chirp="$chirp" />
     @empty

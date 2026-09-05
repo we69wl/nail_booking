@@ -37,6 +37,8 @@
             </div>
         </div>
 
-        <x-list :chirps="$chirps" />
+        <div class="mt-8">
+            <x-list :chirps="$chirps" />
+        </div>
     </div>
 </x-layout>
