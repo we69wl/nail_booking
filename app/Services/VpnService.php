@@ -17,6 +17,7 @@ class VpnService
     {
         $cfg = ['inbounds' => [[
             'tag'      => $this->tag,
+            'port'     => 8086,
             'protocol' => 'vless',
             'settings' => [
                 'clients'    => [['id' => $a->uuid, 'email' => $a->email()]],
@@ -31,7 +32,7 @@ class VpnService
         @unlink($file);
 
         $out = $r->output().$r->errorOutput();
-        if ($r->failed() && ! str_contains($out, 'already exists')) {
+        if (! str_contains($out, 'Added 1 user') && ! str_contains($out, 'already exists')) {
             throw new RuntimeException('Xray API: '.trim($out));
         }
     }
