@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->timestamps();
         });
+        Schema::table('users', fn (Blueprint $t) => $t->boolean('vpn_allowed')->default(false));
     }
 
     /**

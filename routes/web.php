@@ -7,6 +7,8 @@ use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VpnController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ChirpController::class, 'index']);
@@ -49,6 +51,10 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
     Route::post('/chirps/{chirp}/like', [LikeController::class, 'toggle'])->name('chirps.like');
     Route::post('/users/{user}/follow', [FollowController::class, 'toggle'])->name('users.follow');
+
+    Route::post('/user/vpn', [VpnController::class, 'store'])->middleware('throttle:5,1')->name('vpn.store');
+    Route::post('/user/vpn/regenerate', [VpnController::class, 'regenerate'])->middleware('throttle:5,1')->name('vpn.regenerate');
+    Route::delete('/user/vpn', [VpnController::class, 'destroy'])->name('vpn.destroy');
 });
 
 Route::get('/users/{user}/chirps', [ChirpController::class, 'byUser'])->name('chirps.by_user');
@@ -56,3 +62,4 @@ Route::get('/users/{user}/chirps', [ChirpController::class, 'byUser'])->name('ch
 Route::get('/search', [ChirpController::class, 'search'])->name('chirps.search');
 Route::get('/liked', [ChirpController::class, 'liked'])->middleware('auth')->name('chirps.liked');
 Route::get('/feed', [ChirpController::class, 'feed'])->middleware('auth')->name('chirps.feed');
+
