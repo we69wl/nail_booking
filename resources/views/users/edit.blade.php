@@ -124,63 +124,6 @@
                 </form>
             </div>
         </div>
-        @if($user->vpn_allowed)
-            @php($vpn = $user->vpnAccount)
-
-            <h2 class="text-3xl font-bold mt-8">VPN</h2>
-            <div class="card bg-base-100 mt-8">
-                <div class="card-body">
-                    @error('vpn', 'vpn')
-                    <div class="alert alert-error text-sm">{{ $message }}</div>
-                    @enderror
-
-                    @if($vpn)
-                        <p class="text-sm text-gray-600">
-                            Ссылка для клиента (v2rayNG, Streisand, Hiddify и т.п.). Не передавайте её другим: по ней любой получит доступ к вашему VPN.
-                        </p>
-
-                        <input
-                            type="text"
-                            id="vpn-link"
-                            value="{{ $vpn->link() }}"
-                            readonly
-                            class="input input-bordered w-full mt-2 text-xs"
-                            onclick="this.select()"
-                        />
-
-                        <div class="card-actions justify-between mt-4">
-                            <button type="button" class="btn btn-ghost btn-sm"
-                                    onclick="navigator.clipboard.writeText(document.getElementById('vpn-link').value)">
-                                Copy
-                            </button>
-
-                            <div class="flex gap-2">
-                                <form method="POST" action="{{ route('vpn.regenerate') }}"
-                                    onsubmit="return confirm('Старая ссылка перестанет работать. Продолжить?')">
-                                    @csrf
-                                    <button type="submit" class="btn btn-warning btn-sm">Regenerate</button>
-                                </form>
-
-                                <form method="POST" action="{{ route('vpn.destroy') }}"
-                                    onsubmit="return confirm('Отключить VPN?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-error btn-sm">Disable</button>
-                                </form>
-                            </div>
-                        </div>
-                    @else
-                        <p class="text-sm text-gray-600">VPN включён для вашего аккаунта. Нажмите, чтобы получить ссылку.</p>
-                        <div class="card-actions justify-end mt-4">
-                            <form method="POST" action="{{ route('vpn.store') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-primary btn-sm">Get VPN</button>
-                            </form>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        @endif
 
         <h2 class="text-3xl font-bold mt-8">Delete Profile</h2>
         <div class="card bg-base-100 mt-8">

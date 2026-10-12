@@ -1,6 +1,7 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\VpnServiceProvider::class,
+    AppServiceProvider::class,
 ];

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -32,7 +31,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'vpn_allowed' => 'boolean',
         ];
     }
 
@@ -68,19 +66,5 @@ class User extends Authenticatable
                 ? Storage::url($this->avatar_path)
                 : 'https://avatars.laravel.cloud/' . urlencode($this->email),
         );
-    }
-
-    public function vpnAccount(): HasOne
-    {
-        return $this->hasOne(VpnAccount::class);
-    }
-
-    protected static function booted(): void
-    {
-        static::deleting(function (User $user) {
-            if ($user->vpnAccount) {
-                app(\App\Services\VpnService::class)->remove($user->vpnAccount);
-            }
-        });
     }
 }

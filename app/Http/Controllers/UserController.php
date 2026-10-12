@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -112,7 +111,7 @@ class UserController extends Controller
             Storage::disk('public')->delete($user->avatar_path);
         }
 
-        Auth::logout();
+        auth()->logout();
 
         $user->delete();
 
